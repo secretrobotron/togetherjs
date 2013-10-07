@@ -103,8 +103,15 @@ define(["jquery", "ui", "util", "session", "elementFinder", "tinycolor", "eventM
         this.atOtherUrl = false;
       }
       if (pos.element) {
-        var target = $(elementFinder.findElement(pos.element));
-        var offset = target.offset();
+        var target, offset;
+        try {
+          target = $(elementFinder.findElement(pos.element));
+          offset = target.offset();
+        }
+        catch (e) {
+          target = document.body;
+          offset = {top: 0, left: 0};
+        }
         top = offset.top + pos.offsetY;
         left = offset.left + pos.offsetX;
       } else {
@@ -412,6 +419,7 @@ define(["jquery", "ui", "util", "session", "elementFinder", "tinycolor", "eventM
       // This is an artificial internal event
       return;
     }
+
     // FIXME: this might just be my imagination, but somehow I just
     // really don't want to do anything at this stage of the event
     // handling (since I'm catching every click), and I'll just do
@@ -451,6 +459,7 @@ define(["jquery", "ui", "util", "session", "elementFinder", "tinycolor", "eventM
         offsetY: offsetY
       });
       displayClick({top: event.pageY, left: event.pageX}, peers.Self.color);
+
     });
   }
 
@@ -468,8 +477,15 @@ define(["jquery", "ui", "util", "session", "elementFinder", "tinycolor", "eventM
     }
     Cursor.getClient(pos.clientId).updatePosition(pos);
     var element = templating.clone("click");
-    var target = $(elementFinder.findElement(pos.element));
-    var offset = target.offset();
+    var target, offset;
+    try {
+      target = $(elementFinder.findElement(pos.element));
+      offset = target.offset();
+    }
+    catch (e) {
+      target = document.body;
+      offset = {top: 0, left: 0};
+    }
     var top = offset.top + pos.offsetY;
     var left = offset.left + pos.offsetX;
     displayClick({top: top, left: left}, pos.peer.color);

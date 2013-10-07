@@ -2,7 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-define(["require", "jquery", "util", "session", "templates", "templating", "linkify", "peers", "windowing", "tinycolor", "elementFinder", "visibilityApi"], function (require, $, util, session, templates, templating, linkify, peers, windowing, tinycolor, elementFinder, visibilityApi) {
+define(["require", "jquery", "util", "session", "templates", "templating", "linkify", "peers", "windowing", "tinycolor", "elementFinder", "visibilityApi", "guide"],
+  function (require, $, util, session, templates, templating, linkify, peers, windowing, tinycolor, elementFinder, visibilityApi, guide) {
   var ui = util.Module('ui');
   var assert = util.assert;
   var AssertionError = util.AssertionError;
@@ -32,6 +33,8 @@ define(["require", "jquery", "util", "session", "templates", "templating", "link
   require(["chat"], function (c) {
     chat = c;
   });
+
+  var currentGuide;
 
   /* Displays some toggleable element; toggleable elements have a
      data-toggles attribute that indicates what other elements should
@@ -287,7 +290,7 @@ define(["require", "jquery", "util", "session", "templates", "templating", "link
       $('#togetherjs-dock #togetherjs-buttons').animate({
         opacity: 1
       });
-      
+
       //for iphone
       if($(window).width() < 480) {
         $('.togetherjs-dock-right').animate({
@@ -497,6 +500,25 @@ define(["require", "jquery", "util", "session", "templates", "templating", "link
 
     $("#togetherjs-chat-button").click(function () {
       windowing.toggle("#togetherjs-chat");
+    });
+
+    function guideOnClick (e) {
+      currentGuide.addStep(e.clientX, e.clientY);
+    }
+
+    $("#togetherjs-guide-button").click(function () {
+      if (!currentGuide) {
+        currentGuide = guide.create(peers.Self.color);
+        console.debug('CREATED NEW GUIDE:', currentGuide.id);
+        setTimeout(function () {
+          document.addEventListener('click', guideOnClick, false);
+        }, 10);
+      }
+      else {
+        currentGuide.finish();
+        document.removeEventListener('click', guideOnClick, false);
+        currentGuide = null;
+      }
     });
 
     session.on("display-window", function (id, element) {

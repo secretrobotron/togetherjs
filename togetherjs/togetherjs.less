@@ -372,6 +372,18 @@ input.togetherjs-upload-avatar {
     background-color: #0F81BF;
   }
 
+  #togetherjs-buttons #togetherjs-guide-button.togetherjs-active {
+    background-image: url('./images/button-chat-active.png') !important;
+    background-color: #0F81BF;
+  }
+
+  #togetherjs-buttons #togetherjs-guide-button{
+    background-image: url('./images/button-share.png');
+    &:hover {
+      background-image: url('./images/button-share-active.png');
+    }
+  }
+
   #togetherjs-dock-anchor {
     height: @anchor-height;
     text-align: center;
@@ -1126,7 +1138,45 @@ section.togetherjs-buttons .togetherjs-same-url {
   text-align: left;
 }
 
+.togetherjs-guide-line {
+  position: fixed;
+  z-index: 9995;
+  background: black;
+  height: 10px;
+  opacity: 0.6;
+  border-radius: 10px;
+  -webkit-transform-origin: 0px 5px;
+     -moz-transform-origin: 0px 5px;
+          transform-origin: 0px 5px;
+}
 
+.togetherjs-guide-marker {
+  position: fixed;
+  z-index: 9998;
+  height: 50px;
+  width: 50px;
+  margin-left: -25px;
+  margin-top: -25px;
+  border-radius: 50px;
+  color: #fff;
+  text-align: center;
+  font-size: 30px;
+  line-height: 50px;
+  font-weight: bold;
+  opacity: 1;
+}
+
+.togetherjs-guide-marker,
+.togetherjs-guide-line {
+  -webkit-transition: opacity 1s;
+     -moz-transition: opacity 1s;
+          transition: opacity 1s;
+}
+
+.togetherjs-guide-marker.fadeout,
+.togetherjs-guide-line.fadeout {
+  opacity: 0;
+}
 
 /* Button set */
 #togetherjs-dock {
@@ -1135,7 +1185,7 @@ section.togetherjs-buttons .togetherjs-same-url {
   background-color: @background-color;
   box-shadow: 0 2px 4px rgba(0,0,0,0.5);
   @border-radius: 4px;
-  @long-side: (@button-size + 9px) * 4 + 64px; // actual button-size * number of buttons + expand thingy
+  @long-side: (@button-size + 9px) * 5 + 64px; // actual button-size * number of buttons + expand thingy
   @short-side: @button-size + 20px;
   /*border:1px solid #000;*/
 
